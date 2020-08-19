@@ -14,7 +14,7 @@ namespace Domain.ValueObjects
         /// Numerical represents the percent
         /// 10 % = 10
         /// </summary>
-        public decimal Value { get; private set; }
+        public decimal Value { get;}
 
         /// <summary>
         /// The fraction that is a percent
@@ -50,6 +50,13 @@ namespace Domain.ValueObjects
             }
 
             return new Percent(percent.Value / denominator);
+        }
+
+        public static Percent operator *(Percent percent, int multiplier)
+        {
+            _ = percent ?? throw new ArgumentNullException(nameof(percent));
+
+            return new Percent(percent.Value * multiplier);
         }
     }
 }

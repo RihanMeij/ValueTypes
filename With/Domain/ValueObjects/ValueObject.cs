@@ -15,7 +15,7 @@ namespace Domain.ValueObjects
         private const int PrimeNumber = 23;
         protected abstract IEnumerable<object> GetEqualityComponents();
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj == null)
             {

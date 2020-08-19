@@ -5,15 +5,9 @@ namespace Domain.ValueObjects
 {
     public class Money : ValueObject
     {
-        public readonly decimal Amount;
+        public decimal Amount { get; }
 
-        public readonly Currency Currency;
-
-        public Money(decimal amount)
-        {
-            Amount = amount;
-            Currency = Currency.ZAR;
-        }
+        public Currency Currency { get; }
 
         public Money(decimal amount, Currency currency)
         {
@@ -22,12 +16,18 @@ namespace Domain.ValueObjects
         }
         public static Money operator *(Money money, Percent percent)
         {
+            _ = money ?? throw new ArgumentNullException(nameof(money));
+            _ = percent ?? throw new ArgumentNullException(nameof(percent));
+
             var amount = money.Amount * percent.Fraction;
             return new Money(amount, money.Currency);
         }
 
         public static Money operator +(Money first, Money second)
         {
+            _ = first ?? throw new ArgumentNullException(nameof(first));
+            _ = second ?? throw new ArgumentNullException(nameof(second));
+
             if (first.Currency != second.Currency)
             {
                 throw new ArgumentOutOfRangeException(nameof(first),"Currency has to match");
@@ -37,14 +37,16 @@ namespace Domain.ValueObjects
 
         public static Money operator *(Money money, decimal amount)
         {
+            _ = money ?? throw new ArgumentNullException(nameof(money));
+
             return new Money(money.Amount * amount, money.Currency);
         }
-
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Amount;
             yield return Currency;
         }
+
     }
 }

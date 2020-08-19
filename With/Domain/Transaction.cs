@@ -5,8 +5,8 @@ namespace Domain
 {
     public class Transaction
     {
-        public readonly Money Amount;
-        public readonly Percent InterestRate;
+        public Money Amount { get; }
+        public Percent InterestRate { get; }
 
         public Transaction(Money amount, Percent interestRate)
         {
@@ -17,7 +17,13 @@ namespace Domain
             InterestRate = interestRate;
         }
 
-        public Money FinanceCharge(Account account, Percent primeInterestRate, Percent taxRate) 
-            => Amount + (account.AdminFee + (account.AdminFee * taxRate)) * ((InterestRate + primeInterestRate) / 365) * account.Term.Days;
+        public Money FinanceCharge(Account account, Percent primeInterestRate, Percent taxRate)
+        {
+            _ = account ?? throw new ArgumentNullException(nameof(account));
+            _ = primeInterestRate ?? throw new ArgumentNullException(nameof(primeInterestRate));
+            _ = taxRate ?? throw new ArgumentNullException(nameof(taxRate));
+
+            return (Amount + (account.AdminFee + account.AdminFee * taxRate)) * ((InterestRate + primeInterestRate) / 365) * account.Term.Days;
+        }
     }
 }
